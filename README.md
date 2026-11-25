@@ -72,3 +72,7 @@ npm run dev
 ## Author
 
 Zainab Alameri ([@Zalameri](https://github.com/Zalameri)), Computer Science & AI student at Effat University.
+
+## Portfolio
+
+Full case study: <https://zalameri.github.io/project.html?p=plantcare-ai>
