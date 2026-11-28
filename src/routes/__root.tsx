@@ -8,7 +8,7 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { type ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { Toaster } from "../components/ui/sonner";
@@ -85,6 +85,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "Upload a plant or leaf photo for AI-powered disease detection, symptoms, causes, treatment, and prevention tips.",
       },
       { name: "author", content: "PlantCare AI" },
+      { name: "theme-color", content: "#247044" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-title", content: "PlantCare" },
       { property: "og:title", content: "PlantCare AI — Plant Disease Detection" },
       {
         property: "og:description",
@@ -105,6 +109,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "manifest", href: "/manifest.webmanifest" },
+      { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "icon", href: "/plantcare-leaf.png?v=2", type: "image/png" },
       { rel: "shortcut icon", href: "/plantcare-leaf.png?v=2" },
     ],
@@ -131,6 +137,14 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    if (import.meta.env.PROD && "serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => {
+        // Not installable (for example plain http); the app still works online.
+      });
+    }
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

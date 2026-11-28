@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useRef, useState, type ChangeEvent, type DragEvent } from "react";
-import { ImagePlus, Loader2, Microscope, RotateCcw, Sprout, Upload } from "lucide-react";
+import { Camera, ImagePlus, Loader2, Microscope, RotateCcw, Sprout, Upload } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { DiagnosisReport } from "@/components/DiagnosisReport";
@@ -71,6 +71,7 @@ const REPORT_FIELDS = [
 function Index() {
   const analyzeFn = useServerFn(analyzePlantImage);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
   const [imageDataUrl, setImageDataUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string>("");
   const [isDragging, setIsDragging] = useState(false);
@@ -191,6 +192,17 @@ function Index() {
               aria-label="Upload a photo of a plant or leaf"
               className="sr-only"
             />
+            {/* On a phone, capture="environment" opens the rear camera directly. */}
+            <input
+              ref={cameraInputRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={onInputChange}
+              aria-label="Take a photo of a plant or leaf with the camera"
+              className="sr-only"
+              data-testid="camera-input"
+            />
 
             {!imageDataUrl ? (
               <div
@@ -222,6 +234,19 @@ function Index() {
                   Drop a plant or leaf photo here, or click to browse
                 </p>
                 <p className="mt-1 text-xs text-muted-foreground">JPG, PNG, or WebP up to 8 MB</p>
+                <Button
+                  type="button"
+                  size="lg"
+                  className="mt-4 min-h-11 w-full max-w-xs"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    cameraInputRef.current?.click();
+                  }}
+                  onKeyDown={(e) => e.stopPropagation()}
+                >
+                  <Camera className="h-4 w-4" />
+                  Take a photo
+                </Button>
               </div>
             ) : (
               <div className="mt-4 space-y-4">
