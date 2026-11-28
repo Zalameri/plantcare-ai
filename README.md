@@ -53,6 +53,22 @@ npm run dev
 
 `.env` is git-ignored, so your key is never committed.
 
+## Install on your phone
+
+PlantCare AI is an installable web app (PWA): a web app manifest, 192/512 px and maskable icons, and a small
+service worker (`public/sw.js`). On a phone, the **Take a photo** button opens the rear camera directly.
+
+- **Android (Chrome):** menu → *Add to Home screen* / *Install app*.
+- **iPhone (Safari):** Share → *Add to Home Screen*.
+
+The app needs a secure origin (https or `localhost`) and a production build (`npm run build`, then `npm run preview`);
+the service worker is only registered in production builds. Offline, pages you already opened still load and any other
+page shows an offline message; analysing a photo always needs the internet because it calls the AI. I checked the
+manifest, service-worker registration, offline fallback and phone layout (390 px) in Chromium; I did not test on a
+physical phone, so the install steps above are unverified on real devices.
+
+![PlantCare AI on a 390 px wide phone screen](docs/phone-home.png)
+
 ## Scripts
 
 | Command | What it does |
